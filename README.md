@@ -1,3 +1,36 @@
+Good:
+
+Fulfills Core MVP Requirements
+Captures trades with required fields.
+Stores them in a relational DB.
+Calculates and exposes average stock prices.
+The controller captures trade data and stores it immediately in the database, ensuring no loss of transactional input (even if it's not yet optimized).
+Authentication - JWT auth with claims is implemented to distinguish brokers.
+Good Naming Conventions
+Class and property names are meaningful and relevant to the domain (e.g., Trade, TickerSymbol, BrokerId)
+
+Bad:
+
+1. Lack of Layered Architecture, All logic (data handling, business logic, request/response) is in the controller.
+
+2. No Separation Between Domain Models and DTOs, Same models used for persistence and API exposure.
+
+3. No Repository Pattern, Data access logic is tightly coupled with controllers.
+
+4. No Caching Strategy, Each API call recalculates averages from the full data set.
+
+5. No Event-Driven Updates, All updates are synchronous.
+
+6. No Unit Testing Support, but IMO ok for MVP. Should be questioned on this strategy.
+
+7. Scalability Bottlenecks, Direct DB access for each API hit leads to poor performance under load.
+* Introduce:
+
+  * Caching
+  * Read/write separation
+  * Background workers for heavy ops
+  * API rate limiting
+
 # London Stock API
 
 This API allows authorized brokers to notify the London Stock Exchange (LSE) of trade transactions and expose updated stock prices. This version uses JWT for authentication and defaults to an In-Memory database for quick setup and demonstration, with a clear path to more scalable solutions.
